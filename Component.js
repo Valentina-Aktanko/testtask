@@ -73,8 +73,6 @@ export class Component {
             // event
             const eventHandler = await this._get(a.value);
             (o._events || (o._events = {}))[name1] = eventHandler;
-            debugger
-            // node.addEventListener('click', event => {alert('click!')});
             await this.replaceAttributes(node, a.name);
             await this.handleEvent(node, name1, eventHandler);
             break;
