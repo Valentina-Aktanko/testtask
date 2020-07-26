@@ -71,7 +71,12 @@ export class Component {
         switch (a.name[0]) {
           case "@":
             // event
-            (o._events || (o._events = {}))[name1] = await this._get(a.value);;
+            const eventHandler = await this._get(a.value);
+            (o._events || (o._events = {}))[name1] = eventHandler;
+            debugger
+            // node.addEventListener('click', event => {alert('click!')});
+            await this.replaceAttributes(node, a.name);
+            await this.handleEvent(node, name1, eventHandler);
             break;
           case ":":
             // reactive prop
@@ -87,9 +92,15 @@ export class Component {
     return o;
   }
 
-  async replaceAttributes(node, attrName, attrNameNew, attrValue) {
+  async replaceAttributes(node, attrName, attrNameNew=null, attrValue=null) {
     node.removeAttribute(attrName);
-    node.setAttribute(attrNameNew, attrValue);
+    if (attrNameNew && attrValue) {
+      node.setAttribute(attrNameNew, attrValue);
+    }
+  }
+
+  async handleEvent(node, type, eventHandler) {
+    node.addEventListener(type, eventHandler);
   }
 
   async renderChilds(parent) {
